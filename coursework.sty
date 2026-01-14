@@ -23,8 +23,21 @@
 \setlength{\parskip}{0pt}
 
 \RequirePackage{graphicx}
-
+\RequirePackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue,
+  citecolor=blue,
+  urlcolor=blue
+}
+\RequirePackage{xurl}
 \RequirePackage{fontspec}
+
+\RequirePackage{tocloft}
+
+\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
+\setlength{\cftsecnumwidth}{2.2em} 
+\setlength{\cftsecindent}{0em}   
 
 \defaultfontfeatures{Ligatures=TeX}
 
