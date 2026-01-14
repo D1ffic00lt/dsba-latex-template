@@ -1,0 +1,84 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{coursework}[2026/01/14 Coursework template (LuaLaTeX, babel, biblatex)]
+
+\RequirePackage{iftex}
+\ifLuaTeX\else
+  \PackageError{coursework}{LuaLaTeX is required}
+    {Compile with LuaLaTeX, e.g.\ latexmk -lualatex -output-directory=build main.tex}
+\fi
+
+\RequirePackage{geometry}
+\geometry{
+  a4paper,
+  left=25mm,
+  right=25mm,
+  top=20mm,
+  bottom=20mm
+}
+
+\RequirePackage{setspace}
+\onehalfspacing
+
+\setlength{\parindent}{1.25cm}
+\setlength{\parskip}{0pt}
+
+\RequirePackage{graphicx}
+
+\RequirePackage{fontspec}
+
+\defaultfontfeatures{Ligatures=TeX}
+
+\ExplSyntaxOn
+\tl_new:N \g_cw_main_font_tl
+\tl_new:N \g_cw_sans_font_tl
+\tl_new:N \g_cw_mono_font_tl
+
+\cs_new_protected:Npn \cw_select_fonts:
+  {
+    \IfFontExistsTF{Times New Roman}
+      {
+        \tl_set:Nn \g_cw_main_font_tl {Times New Roman}
+      }
+      {
+        \tl_set:Nn \g_cw_main_font_tl {TeX Gyre Termes}
+      }
+
+    \IfFontExistsTF{Arial}
+      { \tl_set:Nn \g_cw_sans_font_tl {Arial} }
+      { \tl_set:Nn \g_cw_sans_font_tl {TeX Gyre Heros} }
+
+    \IfFontExistsTF{Menlo}
+      { \tl_set:Nn \g_cw_mono_font_tl {Menlo} }
+      { \tl_set:Nn \g_cw_mono_font_tl {TeX Gyre Cursor} }
+
+    \setmainfont{\tl_use:N \g_cw_main_font_tl}
+    \setsansfont{\tl_use:N \g_cw_sans_font_tl}
+    \setmonofont{\tl_use:N \g_cw_mono_font_tl}
+  }
+\cw_select_fonts:
+\ExplSyntaxOff
+
+\newcommand{\CWMakeTitle}{%
+  \begingroup
+  \input{titlepages/tp-coursework.tex}%
+  \endgroup
+}
+
+\ExplSyntaxOn
+\cs_new_protected:Npn \cw_signature:n #1
+  {
+    \tl_set:Nx \l_tmpa_tl {#1}
+    \tl_trim_spaces:N \l_tmpa_tl
+    \tl_if_blank:VTF \l_tmpa_tl
+      {
+        \rule{50mm}{0.4pt}
+      }
+      {
+        \includegraphics[height=8mm,keepaspectratio]{\tl_use:N \l_tmpa_tl}
+      }
+  }
+\ExplSyntaxOff
+
+\newcommand{\CWSignature}[1]{\csname cw_signature:n\endcsname{#1}}
+
+\endinput
